@@ -7,17 +7,31 @@ private:
 public:
     BankAccount(double initialBalance) : balance(initialBalance) {}
 
-    double getBalance() const {
-        return balance;
-    }
 
     void deposit(double amount) {
-        balance += amount;
+        if (amount > 0) {
+            balance += amount;
+            std::cout << "Deposited: $" << amount << std::endl;
+        }
+        else {
+            std::cout << "Deposit amount must be positive." << std::endl;
+        }
     }
 
     void withdraw(double amount) {
-        balance -= amount;
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            std::cout << "Withdrawn: $" << amount << std::endl;
+            std::cout << "New balance: $" << balance << std::endl;
+        }
+        else {
+            std::cout << "Withdrawal failed: Insufficient funds or invalid amount." << std::endl;
+        }
     }
+    void displayBalance() const {
+        std::cout << "Current balance: $" << balance << std::endl;
+    }
+
 };
 class HeatingSystem {
 public:
@@ -123,17 +137,13 @@ int main() {
     //////////////////////////////////////////////////////////////////
     // Exercise 1
     //////////////////////////////////////////////////////////////////
- 
+
     BankAccount account(1000.0);
 
     // Violation of Tell, Don't Ask
-    if (account.getBalance() > 500) {
-        account.withdraw(500);
-        std::cout << "Withdrawal successful. New balance: $" << account.getBalance() << std::endl;
-    }
-    else {
-        std::cout << "Insufficient funds for withdrawal." << std::endl;
-    }
+
+    account.withdraw(500);
+    account.displayBalance();
     //////////////////////////////////////////////////////////////////
     // Exercise 2
     //////////////////////////////////////////////////////////////////
@@ -147,7 +157,7 @@ int main() {
     else {
         heating.turnOff();
     }
-    
+
     //////////////////////////////////////////////////////////////////
     // Exercise 3
     //////////////////////////////////////////////////////////////////
