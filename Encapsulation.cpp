@@ -103,7 +103,7 @@ public:
         // Violates Tell, Don't Ask
         if (book.checkAvailability()) {
             book.borrowBook();
-          //  std::cout << "Book borrowed successfully." << std::endl;
+          
         }
         else {
             std::cout << "Book is not available for borrowing." << std::endl;
@@ -116,6 +116,15 @@ private:
     int health;
     int ammo;
 
+    // Helper methods
+    void takeDamage(int damage) {
+        health -= damage;
+    }
+
+    void useAmmo() {
+        ammo--;
+    }
+
 public:
     Player() : health(100), ammo(10) {}
 
@@ -127,26 +136,23 @@ public:
         return ammo;
     }
 
-    void takeDamage(int damage) {
-        health -= damage;
-    }
-
-    void useAmmo() {
-        ammo--;
+    // Function to handle the attack and ammo usage
+    void respondToAttack() {
+        if (health > 0 && ammo > 0) {
+            takeDamage(10);
+            useAmmo();
+            std::cout << "Player attacked and used ammo." << std::endl;
+        }
+        else {
+            std::cout << "Player can't respond to attack." << std::endl;
+        }
     }
 };
 
 class Game {
 public:
     void enemyAttack(Player& player) {
-        if (player.getHealth() > 0 && player.getAmmo() > 0) {
-            player.takeDamage(10);
-            player.useAmmo();
-            std::cout << "Player attacked and used ammo." << std::endl;
-        }
-        else {
-            std::cout << "Player can't respond to attack." << std::endl;
-        }
+        player.respondToAttack();  // Let the player handle its own response
     }
 };
 
@@ -190,7 +196,8 @@ int main() {
     Player player;
     Game game;
 
-    game.enemyAttack(player); // Player can respond to attack
+    game.enemyAttack(player);  // Player can respond to attack
+    game.enemyAttack(player);  // Player can respond to attack again if health and ammo permit
 
     return 0;
 }
