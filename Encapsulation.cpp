@@ -33,26 +33,37 @@ public:
     }
 
 };
-class HeatingSystem {
+class Boiler {
 public:
     void turnOn() {
-        std::cout << "Heating system turned on." << std::endl;
+        std::cout << "Boiler turned on." << std::endl;
     }
 
     void turnOff() {
-        std::cout << "Heating system turned off." << std::endl;
+        std::cout << "Boiler turned off." << std::endl;
     }
 };
 
 class Thermostat {
 private:
     double currentTemperature;
+    Boiler* boiler;
 
 public:
-    Thermostat(double temperature) : currentTemperature(temperature) {}
+    Thermostat(double temperature, Boiler* contolledBoiler) : currentTemperature(temperature), boiler(contolledBoiler) {}
 
-    double getCurrentTemperature() const {
-        return currentTemperature;
+    void updateTemperature(double temperature) {
+        currentTemperature = temperature;
+        controlBoiler(); 
+    }
+
+    void controlBoiler() {
+        if (currentTemperature < 20.0) {
+            boiler->turnOn();
+        }
+        else {
+            boiler->turnOff();
+        }
     }
 };
 #include <iostream>
@@ -148,15 +159,13 @@ int main() {
     // Exercise 2
     //////////////////////////////////////////////////////////////////
 
-    Thermostat thermostat(18.5);
-    HeatingSystem heating;
+    Boiler heating;
+    Thermostat thermostat(18, &heating);
 
-    if (thermostat.getCurrentTemperature() < 20.0) {
-        heating.turnOn();
-    }
-    else {
-        heating.turnOff();
-    }
+    // Simulate temperature changes
+    thermostat.updateTemperature(18.5); // Heating system should turn on
+    thermostat.updateTemperature(21.0); // Heating system should turn off
+
 
     //////////////////////////////////////////////////////////////////
     // Exercise 3
